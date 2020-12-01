@@ -26,7 +26,12 @@ router.get("/:id", function (req, res, next) {
     });
 });
 
-router.post("/", function (req, res, next) {
+router.post("/", uploader.single("images"), function(req, res, next) {
+console.log(req.body)
+  if (req.files) {
+    req.body.images = req.files.path;
+  }
+
   Clothes.create(req.body)
     .then((dbResponse) => {
       res.status(201).json(dbResponse);
@@ -57,8 +62,5 @@ router.delete("/:id", (req, res, next) => {
       res.sendStatus(500).json(error);
     });
 });
-
-
-
 
 module.exports = router;
